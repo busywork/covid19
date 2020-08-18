@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
 
-function App() {
+import Daily from './containers/Daily';
+import Map from './containers/Map';
+
+import { GlobalStyle, theme } from './styles';
+import { getCurrentData } from './redux/current';
+import { getHistoricData } from './redux/historic';
+import { getStateCurrentData } from './redux/states';
+
+export default () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getHistoricData());
+    dispatch(getCurrentData());
+    dispatch(getStateCurrentData());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme.default}>
+      <GlobalStyle />
+      <div className="container">
+        <div className="row">
+          <div className="col">
+            <Daily />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <Map />
+          </div>
+        </div>
+      </div>
+    </ThemeProvider>
   );
-}
-
-export default App;
+};
