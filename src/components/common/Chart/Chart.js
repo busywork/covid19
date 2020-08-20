@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import { Line } from 'react-chartjs-2';
 import { orderBy } from 'lodash';
 
-const Wrapper = styled.div`
+const Container = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  width: 100%;
-  height: 128px;
 `;
 
 export default ({ data, dataKey, color }) => {
@@ -62,5 +60,5 @@ export default ({ data, dataKey, color }) => {
     />
   ) : null;
 
-  return <Wrapper>{lineChart}</Wrapper>;
+  return <Container>{lineChart}</Container>;
 };

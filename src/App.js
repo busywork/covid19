@@ -6,7 +6,6 @@ import Daily from './containers/Daily';
 import Map from './containers/Map';
 
 import { GlobalStyle, theme } from './styles';
-import { getCurrentData } from './redux/current';
 import { getHistoricData } from './redux/historic';
 import { getStateCurrentData } from './redux/states';
 
@@ -15,7 +14,6 @@ export default () => {
 
   useEffect(() => {
     dispatch(getHistoricData());
-    dispatch(getCurrentData());
     dispatch(getStateCurrentData());
   }, [dispatch]);
 

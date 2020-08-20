@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Wrapper = styled.div`
+const Container = styled.div`
   text-align: center;
 `;
 
@@ -19,9 +19,9 @@ const Label = styled.span`
 
 export default ({ value, label }) => {
   return (
-    <Wrapper>
+    <Container>
       <Value>{value}</Value>
       {label && <Label children={label} />}
-    </Wrapper>
+    </Container>
   );
 };

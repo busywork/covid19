@@ -42,16 +42,34 @@ export const getStateCurrentData = () => dispatch => {
         population: find(states, ['code', state.state]).population,
         ...state,
       }));
-      res.data = res.data.map(({ state, name, positive, positiveIncrease, total, population }) => ({
-        id: state,
-        name,
-        population,
-        positive,
-        positiveIncrease,
-        total,
-        totalPerCapita: total / (population / 100000),
-        positivePerCapita: positive / (population / 100000),
-      }));
+      res.data = res.data.map(
+        ({
+          state,
+          name,
+          population,
+          positive,
+          positiveIncrease,
+          hospitalizedCurrently,
+          hospitalizedIncrease,
+          death,
+          deathIncrease,
+          total,
+        }) => ({
+          id: state,
+          name,
+          population,
+          positive,
+          positiveIncrease,
+          positivePerCapita: positive / (population / 100000),
+          hospitalizedCurrently,
+          hospitalizedIncrease,
+          death,
+          deathIncrease,
+          deathPerCapita: death / (population / 100000),
+          total,
+          totalPerCapita: total / (population / 100000),
+        })
+      );
       dispatch(fetchDataSuccess(res.data));
     })
     .catch(err => console.log(err));
