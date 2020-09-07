@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ComposableMap, Geographies, Geography, Marker, Annotation } from 'react-simple-maps';
 import { geoCentroid } from 'd3-geo';
 import { scaleQuantile } from 'd3-scale';
-import { map, find, round } from 'lodash';
+import { find, kebabCase, map, round } from 'lodash';
 
 import allStates from '../../../utils/states.json';
 
@@ -32,12 +33,13 @@ export default ({ data, colorRange, showValues = false, dataKey }) => {
               const { name } = geo.properties;
               const state = find(data, { name });
               return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill={state ? colorScale(state[dataKey]) : '#000'}
-                  style={{ cursor: 'pointer' }}
-                />
+                <Link key={geo.rsmKey} to={`/${kebabCase(name)}`}>
+                  <Geography
+                    geography={geo}
+                    fill={state ? colorScale(state[dataKey]) : '#000'}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Link>
               );
             })}
             {geographies.map(geo => {

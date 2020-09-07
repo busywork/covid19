@@ -9,9 +9,9 @@ import Label from '../components/common/Switch/Label';
 const colorRange = ['#ffff00', '#fff300', '#ffe600', '#ffda00', '#ffcd00', '#ffc100', '#ffb400', '#ffa700', '#ff9a00', '#ff8c00'];
 
 export default () => {
-  const { data } = useSelector(state => (state.states ? state.states : null));
+  const { current } = useSelector(state => (state.states ? state.states : null));
   const [dataKey, setDataKey] = useState('positiveIncrease');
-  const [total, setTotal] = useState(map(data, dataKey));
+  const [total, setTotal] = useState(map(current, dataKey));
   const [visible, setVisible] = useState(false);
   const [options] = useState([
     { label: 'Positive Increase', value: 'positiveIncrease' },
@@ -26,9 +26,9 @@ export default () => {
     { label: 'Death Per Capita', value: 'deathPerCapita' },
   ]);
 
-  useEffect(() => setTotal(map(data, dataKey)), [data, dataKey]);
+  useEffect(() => setTotal(map(current, dataKey)), [current, dataKey]);
 
-  if (!data) return null;
+  if (!current) return null;
 
   return (
     <div className="container d-flex flex-column">
@@ -43,7 +43,7 @@ export default () => {
       </div>
 
       <Legend dataKey={dataKey} colorRange={colorRange} total={total} />
-      <Map data={data} dataKey={dataKey} colorRange={colorRange} showValues={visible} />
+      <Map data={current} dataKey={dataKey} colorRange={colorRange} showValues={visible} />
     </div>
   );
 };

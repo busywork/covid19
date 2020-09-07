@@ -1,26 +1,32 @@
 import axios from 'axios';
-import { find, map, pick } from 'lodash';
+import { find, groupBy, pick, map } from 'lodash';
 
 const STATES_CURRENT_API_URL = 'https://api.covidtracking.com/v1/states/current.json';
+const STATES_HISTORIC_API_URL = 'https://api.covidtracking.com/v1/states/daily.json';
+const STATES_INFO_API_URL = 'https://api.covidtracking.com/v1/states/info.json';
 
 /* -----------------    ACTION TYPES    ------------------ */
 
-const FETCH_STATE_CURRENT = 'FETCH_STATE_CURRENT';
+const FETCH_STATE = 'FETCH_STATE';
 const FETCH_STATE_CURRENT_SUCCESS = 'FETCH_STATE_CURRENT_SUCCESS';
+const FETCH_STATE_HISTORIC_SUCCESS = 'FETCH_STATE_HISTORIC_SUCCESS';
 
 /* ------------    ACTION CREATORS      ------------------ */
 
-const fetchData = () => ({ type: FETCH_STATE_CURRENT });
-const fetchDataSuccess = data => ({ type: FETCH_STATE_CURRENT_SUCCESS, data });
+const fetchData = () => ({ type: FETCH_STATE });
+const fetchCurrentSuccess = data => ({ type: FETCH_STATE_CURRENT_SUCCESS, data });
+const fetchHistoricSuccess = data => ({ type: FETCH_STATE_HISTORIC_SUCCESS, data });
 
 /* ------------         REDUCER         ------------------ */
 
 export default (state = { isLoading: false }, action) => {
   switch (action.type) {
-    case FETCH_STATE_CURRENT:
+    case FETCH_STATE:
       return { ...state, isLoading: true };
     case FETCH_STATE_CURRENT_SUCCESS:
-      return { ...state, data: action.data, isLoading: false };
+      return { ...state, current: action.data, isLoading: false };
+    case FETCH_STATE_HISTORIC_SUCCESS:
+      return { ...state, historic: action.data, isLoading: false };
     default:
       return state;
   }
@@ -28,7 +34,7 @@ export default (state = { isLoading: false }, action) => {
 
 /* ------------       THUNK CREATORS     ------------------ */
 
-export const getStateCurrentData = () => dispatch => {
+export const getStateCurrent = () => dispatch => {
   let states = require('../utils/states-full.json');
   dispatch(fetchData());
   axios
@@ -70,7 +76,28 @@ export const getStateCurrentData = () => dispatch => {
           totalPerCapita: total / (population / 100000),
         })
       );
-      dispatch(fetchDataSuccess(res.data));
+      dispatch(fetchCurrentSuccess(res.data));
+    })
+    .catch(err => console.log(err));
+};
+
+export const getStateHistoric = () => dispatch => {
+  let states = require('../utils/states-full.json');
+  dispatch(fetchData());
+  axios
+    .all([axios.get(STATES_HISTORIC_API_URL), axios.get(STATES_INFO_API_URL)])
+    .then(res => {
+      const continental = map(states, 'code');
+      res[1].data = res[1].data.filter(({ state }) => continental.includes(state));
+      res[0].data = groupBy(res[0].data, element => element.state);
+      // console.log('RES000', res[0].data);
+      // console.log('RES111', res[1].data);
+      res[1].data = res[1].data.map(state => ({
+        ...find(states, ['code', state.state]),
+        data: res[0].data[state.state],
+        ...state,
+      }));
+      dispatch(fetchHistoricSuccess(res[1].data));
     })
     .catch(err => console.log(err));
 };

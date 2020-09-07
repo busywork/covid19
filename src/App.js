@@ -1,37 +1,32 @@
 import React, { useEffect } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 
-import Daily from './containers/Daily';
-import Map from './containers/Map';
+import { Home, State } from './pages';
 
 import { GlobalStyle, theme } from './styles';
 import { getHistoricData } from './redux/historic';
-import { getStateCurrentData } from './redux/states';
+import { getStateCurrent, getStateHistoric } from './redux/states';
 
 export default () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getHistoricData());
-    dispatch(getStateCurrentData());
+    Promise.all([
+      dispatch(getHistoricData()),
+      dispatch(getStateCurrent()),
+      dispatch(getStateHistoric()),
+    ]);
   }, [dispatch]);
 
   return (
     <ThemeProvider theme={theme.default}>
       <GlobalStyle />
-      <div className="container">
-        <div className="row">
-          <div className="col">
-            <Daily />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col">
-            <Map />
-          </div>
-        </div>
-      </div>
+      <Switch>
+        <Route path="/:id" component={State} />
+        <Route exact path="/" component={Home} />
+      </Switch>
     </ThemeProvider>
   );
 };

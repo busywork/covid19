@@ -31,7 +31,7 @@ export default ({ dataKey, colorRange, total }) => (
     <div className="text-right mr-2">
       <Value>
         {round(min(total))}
-        {dataKey === 'positivePerCapita' || dataKey === 'totalPerCapita' ? '/ 100k' : null}
+        {dataKey.includes('Capita') ? '/ 100k' : null}
       </Value>
       <Label>LEAST</Label>
     </div>
@@ -43,7 +43,7 @@ export default ({ dataKey, colorRange, total }) => (
     <div className="ml-2">
       <Value>
         {round(max(total))}
-        {dataKey === 'positivePerCapita' || dataKey === 'totalPerCapita' ? '/ 100k' : null}
+        {dataKey.includes('Capita') ? '/ 100k' : null}
       </Value>
       <Label>MOST</Label>
     </div>
