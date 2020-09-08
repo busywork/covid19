@@ -7,10 +7,9 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   font-size: ${({ theme }) => theme.sizes.xxl};
-  height: 256px;
 `;
 
-export default ({ imgURL, name, nickname, covid19Site }) => {
+export default ({ name, nickname, covid19Site }) => {
   return (
     <>
       <Container>

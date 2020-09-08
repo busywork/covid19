@@ -81,10 +81,13 @@ export default ({ data, colorRange, showValues = false, dataKey }) => {
           cursor: pointer;
         }
         .rsm-geographies text {
+          stroke: #CCC;
+          fill: #666;
           pointer-events: none;
+
         }
         .rsm-annotation path {
-          stroke: #000 !important;
+          stroke: #CCC;
         }
       `}</style>
     </ComposableMap>
