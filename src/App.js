@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 
 import { Home, State } from './pages';
+import { Navigation } from './components';
 
 import { GlobalStyle, theme } from './styles';
 import { getHistoricData } from './redux/historic';
@@ -23,6 +24,7 @@ export default () => {
   return (
     <ThemeProvider theme={theme.default}>
       <GlobalStyle />
+      <Navigation />
       <Switch>
         <Route path="/:id" component={State} />
         <Route exact path="/" component={Home} />

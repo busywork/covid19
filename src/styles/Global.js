@@ -32,4 +32,15 @@ canvas {
   width: 100%;
 }
 
+a {
+  color: ${({ theme }) => theme.colors.primary};
+  text-decoration: none;
+  &:hover,
+  &:focus,
+  &.active {
+    color: ${({ theme }) => theme.colors.primary};
+    text-decoration: none;
+  }
+}
+
 `;
